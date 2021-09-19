@@ -5,48 +5,36 @@ radio.setTransmitPower(7)
 pins.analogWritePin(AnalogPin.P1, 0)
 pins.analogWritePin(AnalogPin.P2, 0)
 let Humedad = pins.analogReadPin(AnalogPin.P0)
-basic.showString("Luz")
+basic.showString("L")
 basic.pause(100)
 led.plotBarGraph(
 input.lightLevel(),
 395
 )
 basic.pause(5000)
-basic.showString("Temp")
+basic.showString("T")
 led.plotBarGraph(
 Temp,
-60
+40
 )
 basic.pause(2000)
-basic.showString("hUMEDAD")
+basic.showString("H")
 led.plotBarGraph(
 Humedad,
 200
 )
 basic.pause(5000)
 basic.forever(function () {
-    radio.sendNumber(Humedad)
-    radio.sendNumber(Luz)
-    radio.sendNumber(Temp)
-})
-basic.forever(function () {
-    if (Temp >= 15) {
+    if (Temp >= 20 && Temp <= 35) {
         led.plotBarGraph(
         Temp,
         140
         )
-        basic.pause(1000)
+        basic.pause(5000)
         basic.showString("ESTABLE")
-    } else {
-        led.plotBarGraph(
-        Temp,
-        150
-        )
-        basic.pause(1000)
-        basic.showString("BAJA.TEMP")
     }
-    basic.pause(500)
-    if (Temp >= 35) {
+    basic.pause(5000)
+    if (Temp >= 35 && Temp <= 34) {
         led.plotBarGraph(
         Temp,
         45
@@ -55,11 +43,57 @@ basic.forever(function () {
         basic.showString("ALTA.TEMP")
     }
     basic.pause(1000)
+    if (Temp >= 10 && Temp <= 16) {
+        led.plotBarGraph(
+        Temp,
+        150
+        )
+        basic.pause(2000)
+        basic.showString("BAJA.TEMP")
+    }
+    if (Humedad >= 300 && Temp >= 35) {
+        basic.showIcon(IconNames.No)
+        basic.pause(100)
+        basic.showString("A!")
+        basic.pause(100)
+        basic.showIcon(IconNames.No)
+    }
+    if (Humedad >= 300 && Temp >= 35) {
+        basic.showIcon(IconNames.No)
+        basic.pause(200)
+        basic.showString("A!")
+        basic.pause(200)
+        basic.showIcon(IconNames.No)
+    }
 })
 basic.forever(function () {
     Temp = input.temperature()
     Humedad = pins.analogReadPin(AnalogPin.P0)
     Luz = input.lightLevel()
+})
+basic.forever(function () {
+    basic.pause(1000)
+    if (input.buttonIsPressed(Button.A)) {
+        led.plotBarGraph(
+        input.temperature(),
+        140
+        )
+    }
+    basic.pause(1000)
+    if (input.buttonIsPressed(Button.B)) {
+        led.plotBarGraph(
+        Humedad,
+        200
+        )
+    }
+    basic.pause(1000)
+    if (input.buttonIsPressed(Button.AB)) {
+        led.plotBarGraph(
+        Luz,
+        395
+        )
+    }
+    basic.pause(1000)
 })
 basic.forever(function () {
     if (Humedad < 300) {
@@ -75,23 +109,12 @@ basic.forever(function () {
     }
     basic.pause(100)
 })
-basic.forever(function () {
-    if (input.buttonIsPressed(Button.A)) {
-        led.plotBarGraph(
-        input.temperature(),
-        140
-        )
-    }
-    if (input.buttonIsPressed(Button.B)) {
-        led.plotBarGraph(
-        Humedad,
-        200
-        )
-    }
-    if (input.buttonIsPressed(Button.AB)) {
-        led.plotBarGraph(
-        Luz,
-        395
-        )
-    }
+control.inBackground(function () {
+    basic.pause(1000)
+    radio.sendNumber(Humedad)
+    basic.pause(1000)
+    radio.sendNumber(Luz)
+    basic.pause(1000)
+    radio.sendNumber(Temp)
+    basic.pause(1000)
 })
