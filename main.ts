@@ -1,7 +1,6 @@
 let Luz = 0
 let Temp = 0
 radio.setGroup(1)
-radio.setTransmitPower(7)
 pins.analogWritePin(AnalogPin.P1, 0)
 pins.analogWritePin(AnalogPin.P2, 0)
 let Humedad = pins.analogReadPin(AnalogPin.P0)
