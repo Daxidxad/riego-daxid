@@ -1,4 +1,8 @@
 let Luz = 0
+let Critico = false
+let Alta_Temp = false
+let Estable = false
+let Baja_Temp = false
 let Temp = 0
 radio.setGroup(1)
 pins.analogWritePin(AnalogPin.P1, 0)
@@ -23,6 +27,22 @@ Humedad,
 200
 )
 basic.pause(5000)
+basic.forever(function () {
+    Baja_Temp = Temp >= 10 && Temp <= 16
+    Estable = Temp >= 20 && Temp <= 35
+    Alta_Temp = Temp >= 28 && Temp <= 34
+    Critico = Humedad >= 600 && Temp >= 35
+})
+basic.forever(function () {
+    radio.sendString("" + (Estable))
+    basic.pause(500)
+    radio.sendString("" + (Baja_Temp))
+    basic.pause(500)
+    radio.sendString("" + (Alta_Temp))
+    basic.pause(500)
+    radio.sendString("" + (Critico))
+    basic.pause(500)
+})
 basic.forever(function () {
     if (Temp >= 20 && Temp <= 35) {
         led.plotBarGraph(
@@ -109,11 +129,12 @@ basic.forever(function () {
     basic.pause(100)
 })
 control.inBackground(function () {
-    basic.pause(1000)
-    radio.sendNumber(Humedad)
-    basic.pause(1000)
-    radio.sendNumber(Luz)
-    basic.pause(1000)
-    radio.sendNumber(Temp)
-    basic.pause(1000)
+    radio.sendString("" + (Estable))
+    basic.pause(500)
+    radio.sendString("" + (Baja_Temp))
+    basic.pause(500)
+    radio.sendString("" + (Alta_Temp))
+    basic.pause(500)
+    radio.sendString("" + (Critico))
+    basic.pause(500)
 })
