@@ -29,19 +29,9 @@ Humedad,
 basic.pause(5000)
 basic.forever(function () {
     Baja_Temp = Temp >= 10 && Temp <= 16
-    Estable = Temp >= 20 && Temp <= 35
+    Estable = Temp >= 20 && Temp <= 27
     Alta_Temp = Temp >= 28 && Temp <= 34
     Critico = Humedad >= 600 && Temp >= 35
-})
-basic.forever(function () {
-    radio.sendString("" + (Estable))
-    basic.pause(500)
-    radio.sendString("" + (Baja_Temp))
-    basic.pause(500)
-    radio.sendString("" + (Alta_Temp))
-    basic.pause(500)
-    radio.sendString("" + (Critico))
-    basic.pause(500)
 })
 basic.forever(function () {
     if (Temp >= 20 && Temp <= 35) {
@@ -129,12 +119,20 @@ basic.forever(function () {
     basic.pause(100)
 })
 control.inBackground(function () {
-    radio.sendString("" + (Estable))
+    if (Temp >= 10 && Temp <= 16) {
+        radio.sendString("Baja.Temp")
+    }
     basic.pause(500)
-    radio.sendString("" + (Baja_Temp))
+    if (Temp >= 20 && Temp <= 27) {
+        radio.sendString("Estable")
+    }
     basic.pause(500)
-    radio.sendString("" + (Alta_Temp))
+    if (Temp >= 28 && Temp <= 34) {
+        radio.sendString("Alta.Temp")
+    }
     basic.pause(500)
-    radio.sendString("" + (Critico))
+    if (Humedad >= 600 && Temp >= 35) {
+        radio.sendString("Critico")
+    }
     basic.pause(500)
 })
